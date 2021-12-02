@@ -36,9 +36,14 @@
 
 <script lang="ts">
 import { Vue, Prop, Component } from "vue-property-decorator";
+import { Feature } from "./typings";
+import "./assets/tailwind.css";
 
 @Component
 export default class FeaturesCentered2x2Grid extends Vue {
+  // @Prop({ required: true })
+  // public theme!: Theme;
+
   @Prop({ required: false, default: "" })
   public preHeading!: string;
 
@@ -49,10 +54,6 @@ export default class FeaturesCentered2x2Grid extends Vue {
   public description!: string;
 
   @Prop({ required: false, default: () => [] })
-  public features!: Array<{
-    heading: string;
-    description: string;
-    icon: string;
-  }>;
+  public features!: Array<Feature>;
 }
 </script>

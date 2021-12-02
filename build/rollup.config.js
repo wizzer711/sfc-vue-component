@@ -11,6 +11,7 @@ import { terser } from "rollup-plugin-terser";
 import ttypescript from "ttypescript";
 import typescript from "rollup-plugin-typescript2";
 import minimist from "minimist";
+import postcss from "rollup-plugin-postcss";
 
 // Get browserslist config and remove ie from es build targets
 const esbrowserslist = fs
@@ -44,7 +45,7 @@ const baseConfig = {
       preventAssignment: true
     },
     vue: {
-      css: true,
+      css: false,
       template: {
         isProduction: true
       }
@@ -102,6 +103,17 @@ if (!argv.format || argv.format === "es") {
       exports: "named"
     },
     plugins: [
+      postcss({
+        config: {
+          path: "src/postcss.config.js"
+        },
+        extract: "tailwind.css",
+        extensions: [".css"],
+        minimize: true,
+        inject: {
+          insertAt: "top"
+        }
+      }),
       replace(baseConfig.plugins.replace),
       ...baseConfig.plugins.preVue,
       vue(baseConfig.plugins.vue),
@@ -145,6 +157,17 @@ if (!argv.format || argv.format === "cjs") {
     plugins: [
       replace(baseConfig.plugins.replace),
       ...baseConfig.plugins.preVue,
+      postcss({
+        config: {
+          path: "src/postcss.config.js"
+        },
+        extract: "tailwind.css",
+        extensions: [".css"],
+        minimize: true,
+        inject: {
+          insertAt: "top"
+        }
+      }),
       vue({
         ...baseConfig.plugins.vue,
         template: {
@@ -174,6 +197,17 @@ if (!argv.format || argv.format === "iife") {
     plugins: [
       replace(baseConfig.plugins.replace),
       ...baseConfig.plugins.preVue,
+      postcss({
+        config: {
+          path: "src/postcss.config.js"
+        },
+        extract: "tailwind.css",
+        extensions: [".css"],
+        minimize: true,
+        inject: {
+          insertAt: "top"
+        }
+      }),
       vue(baseConfig.plugins.vue),
       ...baseConfig.plugins.postVue,
       babel(baseConfig.plugins.babel),
